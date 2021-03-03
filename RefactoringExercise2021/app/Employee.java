@@ -1,14 +1,12 @@
-package app;
-/*
+package app;/*
  * 
  * This is the definition of the Employee object
  * 
  * */
-
 public class Employee{
 	private int employeeId;
 	private String pps;
-	private String surname;
+	private String surName;
 	private String firstName;
 	private char gender;
 	private String department;
@@ -19,7 +17,7 @@ public class Employee{
 	public Employee() {
 		this.employeeId = 0;
 		this.pps = "";
-		this.surname = "";
+		this.surName = "";
 		this.firstName = "";
 		this.gender = '\0';
 		this.department = "";
@@ -28,17 +26,17 @@ public class Employee{
 	}//end Employee with no details
 
 	// Create Employee with details
-	public Employee(int employeeId, String pps, String surname, String firstName, char gender, String department, double salary,
+	public Employee(int employeeId, String pps, String surName, String firstName, char gender, String department, double salary,
 			boolean fullTime) {
 		this.employeeId = employeeId;
 		this.pps = pps;
-		this.surname = surname;
+		this.surName = surName;
 		this.firstName = firstName;
 		this.gender = gender;
 		this.department = department;
 		this.salary = salary;
 		this.fullTime = fullTime;
-	}// end Employee with details
+	}
 
 	// Getter methods
 	public int getEmployeeId() {
@@ -49,8 +47,8 @@ public class Employee{
 		return pps;
 	}
 
-	public String getSurname() {
-		return this.surname;
+	public String getSurName() {
+		return this.surName;
 	}
 
 	public String getFirstName() {
@@ -82,8 +80,8 @@ public class Employee{
 		this.pps = pps;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setSurName(String surName) {
+		this.surName = surName;
 	}
 
 	public void setFirstName(String firstName) {
@@ -114,8 +112,8 @@ public class Employee{
 		else
 			bool = "No";
 
-		return "Employee ID: " + this.employeeId + "\nPPS Number: " + this.pps + "\nSurname: " + this.surname
+		return "Employee ID: " + this.employeeId + "\nPPS Number: " + this.pps + "\nsurName: " + this.surName
 				+ "\nFirst Name: " + this.firstName + "\nGender: " + this.gender + "\nDepartment: " + this.department + "\nSalary: " + this.salary
 				+ "\nFull Time: " + bool;
-	}// end toString
+	}
 }// end class Employee
