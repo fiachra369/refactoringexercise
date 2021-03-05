@@ -1,5 +1,4 @@
-package app;
-/*
+package app;/*
  * 
  * This is the summary dialog for displaying all Employee details
  * 
@@ -27,84 +26,56 @@ import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
+@SuppressWarnings("serial")
 public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 	// vector with all Employees details
 	Vector<Object> allEmployees;
 	JButton back;
 	
 	public EmployeeSummaryDialog(Vector<Object> allEmployees) {
-		setTitle("Employee Summary");
-		setModal(true);
-		this.allEmployees = allEmployees;
-
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-		JScrollPane scrollPane = new JScrollPane(summaryPane());
-		setContentPane(scrollPane);
-
-		setSize(850, 500);
-		setLocation(350, 250);
-		setVisible(true);
-
+		extractedSummaryDialog(allEmployees);
 	}
-	// initialise container
+	
+	// initialize container
 	public Container summaryPane() {
 		JPanel summaryDialog = new JPanel(new MigLayout());
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JTable employeeTable;
 		DefaultTableModel tableModel;
+		
 		// column center alignment
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		
 		// column left alignment 
 		DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
 		Vector<String> header = new Vector<String>();
+		
 		// header names
-		String[] headerName = { "ID", "PPS Number", "Surname", "First Name", "Gender", "Department", "Salary",
-				"Full Time" };
+		String[] headerName = { "ID", "PPS Number", "Surname", "First Name",
+							   "Gender","Department", "Salary", "Full Time" };
+		
 		// column widths
 		int[] colWidth = { 15, 100, 120, 120, 50, 120, 80, 80 };
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		leftRenderer.setHorizontalAlignment(JLabel.LEFT);
+		
 		// add headers
 		for (int i = 0; i < headerName.length; i++) {
 			header.addElement(headerName[i]);
-		}// end for
-		// construnct table and choose table model for each column
-		tableModel = new DefaultTableModel(this.allEmployees, header) {
-			public Class getColumnClass(int c) {
-				switch (c) {
-				case 0:
-					return Integer.class;
-				case 4:
-					return Character.class;
-				case 6:
-					return Double.class;
-				case 7:
-					return Boolean.class;
-				default:
-					return String.class;
-				}// end switch
-			}// end getColumnClass
-		};
+		}
+		
+		// construct table and choose table model for each column
+		tableModel = extractTableModel();
 
 		employeeTable = new JTable(tableModel);
+		
 		// add header names to table
 		for (int i = 0; i < employeeTable.getColumnCount(); i++) {
 			employeeTable.getColumn(headerName[i]).setMinWidth(colWidth[i]);
-		}// end for
+		}
 		// set alignments
-		employeeTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
-		employeeTable.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
-		employeeTable.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer());
-
-		employeeTable.setEnabled(false);
-		employeeTable.setPreferredScrollableViewportSize(new Dimension(800, (15 * employeeTable.getRowCount() + 15)));
-		employeeTable.setAutoCreateRowSorter(true);
-		JScrollPane scrollPane = new JScrollPane(employeeTable);
-
-		buttonPanel.add(back = new JButton("Back"));
-		back.addActionListener(this);
-		back.setToolTipText("Return to main screen");
+		JScrollPane scrollPane = extractedSetAlignment(buttonPanel, employeeTable,
+														centerRenderer, leftRenderer);
 		
 		summaryDialog.add(buttonPanel,"growx, pushx, wrap");
 		summaryDialog.add(scrollPane,"growx, pushx, wrap");
@@ -117,8 +88,8 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		if (e.getSource() == back){
 			dispose();
 		}
-
 	}
+
 	// format for salary column
 	static class DecimalFormatRenderer extends DefaultTableCellRenderer {
 		 private static final DecimalFormat format = new DecimalFormat(
@@ -134,6 +105,62 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 			value = format.format((Number) value);
 
 			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-		}// end getTableCellRendererComponent
+		}
 	}// DefaultTableCellRenderer
+	
+	//***********EXTRACTED Methods****************************
+	public void extractedSummaryDialog(Vector<Object> allEmployees) {
+		setTitle("Employee Summary");
+		setModal(true);
+		this.allEmployees = allEmployees;
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		JScrollPane scrollPane = new JScrollPane(summaryPane());
+		setContentPane(scrollPane);
+
+		setSize(850, 500);
+		setLocation(350, 250);
+		setVisible(true);
+	}
+	
+	private DefaultTableModel extractTableModel() {
+		DefaultTableModel tableModel;
+		tableModel = new DefaultTableModel(this.allEmployees, 0) {
+			@SuppressWarnings("unchecked")
+			public Class getColumnClass(int c) {
+				switch (c) {
+				case 0:
+					return Integer.class;
+				case 4:
+					return Character.class;
+				case 6:
+					return Double.class;
+				case 7:
+					return Boolean.class;
+				default:
+					return String.class;
+				}
+			}
+		};
+		return tableModel;
+	}
+	
+	private JScrollPane extractedSetAlignment(JPanel buttonPanel, JTable employeeTable, DefaultTableCellRenderer centerRenderer,
+			DefaultTableCellRenderer leftRenderer) {
+		employeeTable.getColumnModel().getColumn(0).setCellRenderer(leftRenderer);
+		employeeTable.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+		employeeTable.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer());
+
+		employeeTable.setEnabled(false);
+		employeeTable.setPreferredScrollableViewportSize(new Dimension(800, (15 * employeeTable.getRowCount() + 15)));
+		employeeTable.setAutoCreateRowSorter(true);
+		JScrollPane scrollPane = new JScrollPane(employeeTable);
+
+		buttonPanel.add(back = new JButton("Back"));
+		back.addActionListener(this);
+		back.setToolTipText("Return to main screen");
+		return scrollPane;
+	}
+	//*******END EXTRACTED METHODS*************************
 }// end class EmployeeSummaryDialog
