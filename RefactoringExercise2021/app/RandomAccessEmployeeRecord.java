@@ -1,4 +1,3 @@
-package app;
 /*
  * 
  * This is a Random Access Employee record definition
@@ -16,27 +15,20 @@ public class RandomAccessEmployeeRecord extends Employee
    public RandomAccessEmployeeRecord()
    {
       this(0, "","","",'\0', "", 0.0, false);
-   } // end RandomAccessEmployeeRecord
+   } 
 
    // Initialize record with details
-   public RandomAccessEmployeeRecord( int employeeId, String pps, String surname, String firstName, char gender, 
-		   String department, double salary, boolean fullTime)
+   public RandomAccessEmployeeRecord( int employeeId, String pps, String surname,
+		   String firstName, char gender, String department, double salary, boolean fullTime)
    {
       super(employeeId, pps, surname, firstName, gender, department, salary, fullTime);
-   } // end RandomAccessEmployeeRecord
+   } 
 
    // Read a record from specified RandomAccessFile
    public void read( RandomAccessFile file ) throws IOException
    {
-	   	setEmployeeId(file.readInt());
-		setPps(readName(file));
-		setSurname(readName(file));
-		setFirstName(readName(file));
-		setGender(file.readChar());
-		setDepartment(readName(file));
-		setSalary(file.readDouble());
-		setFullTime(file.readBoolean());
-   } // end read
+	   	extractedReading(file);
+   }
 
    // Ensure that string is correct length
    private String readName( RandomAccessFile file ) throws IOException
@@ -47,23 +39,15 @@ public class RandomAccessEmployeeRecord extends Employee
       {
          temp = file.readChar();
          name[ count ] = temp;
-      } // end for     
-      
+      }     
       return new String( name ).replace( '\0', ' ' );
-   } // end readName
+   } 
 
    // Write a record to specified RandomAccessFile
    public void write( RandomAccessFile file ) throws IOException
    {
-      file.writeInt( getEmployeeId() );
-      writeName(file, getPps().toUpperCase());
-      writeName( file, getSurname().toUpperCase() );
-      writeName( file, getFirstName().toUpperCase() );
-      file.writeChar(getGender());
-      writeName(file,getDepartment());
-      file.writeDouble( getSalary() );
-      file.writeBoolean(getFullTime());
-   } // end write
+      extractedWriteRecord(file);
+   } 
 
    // Ensure that string is correct length
    private void writeName( RandomAccessFile file, String name )
@@ -78,5 +62,29 @@ public class RandomAccessEmployeeRecord extends Employee
 
       buffer.setLength( 20 );
       file.writeChars( buffer.toString() );
-   } // end writeName
+   }
+   
+   //*************EXTRACTED METHODS********************
+   private void extractedReading(RandomAccessFile file) throws IOException {
+		setEmployeeId(file.readInt());
+		setPps(readName(file));
+		setSurName(readName(file));
+		setFirstName(readName(file));
+		setGender(file.readChar());
+		setDepartment(readName(file));
+		setSalary(file.readDouble());
+		setFullTime(file.readBoolean());
+	}
+   
+   private void extractedWriteRecord(RandomAccessFile file) throws IOException {
+		file.writeInt( getEmployeeId() );
+	      writeName(file, getPps().toUpperCase());
+	      writeName( file, getSurName().toUpperCase() );
+	      writeName( file, getFirstName().toUpperCase() );
+	      file.writeChar(getGender());
+	      writeName(file,getDepartment());
+	      file.writeDouble( getSalary() );
+	      file.writeBoolean(getFullTime());
+	}
+   //**********END EXTRACT METHODS************************
 } // end class RandomAccessEmployeeRecord
