@@ -1,4 +1,3 @@
-package app;
 /*
  * 
  * This is a dialog for searching Employees by their surname.
@@ -24,8 +23,36 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 	EmployeeDetails parent;
 	JButton search, cancel;
 	JTextField searchField;
+	
 	// constructor for search by surname dialog
 	public SearchBySurnameDialog(EmployeeDetails parent) {
+		extractedSearchBySurname(parent);
+	}
+
+	// initialize search container
+	public Container searchPane() {
+		return extractedSearchPane();
+	}
+
+	// action listener for save and cancel button
+	public void actionPerformed(ActionEvent e) {
+
+		if(e.getSource() == search){
+			this.parent.searchBySurnameField.setText(searchField.getText());
+		
+			// search Employee by surname
+			this.parent.searchEmployeeBySurname();
+			dispose();
+		}
+		
+		// else dispose dialog
+		else if(e.getSource() == cancel)
+			dispose();
+	}
+	
+	//***********EXTRACTED METHODS*************************
+	
+	private void extractedSearchBySurname(EmployeeDetails parent) {
 		setTitle("Search by Surname");
 		setModal(true);
 		this.parent = parent;
@@ -39,10 +66,9 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 		setSize(500, 190);
 		setLocation(350, 250);
 		setVisible(true);
-	}// end SearchBySurnameDialog
+	}
 	
-	// initialize search container
-	public Container searchPane() {
+	private Container extractedSearchPane() {
 		JPanel searchPanel = new JPanel(new GridLayout(3,1));
 		JPanel textPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
@@ -68,19 +94,6 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 		searchPanel.add(buttonPanel);
 
 		return searchPanel;
-	}// end searchPane
-
-	// action listener for save and cancel button
-	public void actionPerformed(ActionEvent e) {
-		// if option search, search for Employee
-		if(e.getSource() == search){
-			this.parent.searchBySurnameField.setText(searchField.getText());
-			// search Employee by surname
-			this.parent.searchEmployeeBySurname();
-			dispose();// dispose dialog
-		}// end if
-		// else dispose dialog
-		else if(e.getSource() == cancel)
-			dispose();// dispose dialog
-	}// end actionPerformed
+	}
+	//*********END OF EXTRACTED METHODS*******************
 }// end class SearchBySurnameDialog
