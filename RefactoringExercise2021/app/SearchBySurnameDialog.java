@@ -1,4 +1,4 @@
-/*
+package app;/*
  * 
  * This is a dialog for searching Employees by their surname.
  * 
